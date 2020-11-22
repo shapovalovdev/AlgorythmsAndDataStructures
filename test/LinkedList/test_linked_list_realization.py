@@ -1,0 +1,245 @@
+import unittest
+from src.LinkedList.linked_list_realization import Node, LinkedList
+
+class TestLinkedList(unittest.TestCase):
+
+    def preparation_default(self):
+        n1=Node(12)
+        n2=Node(144)
+        n3=Node(55)        
+        test_list=LinkedList()
+        test_list.add_in_tail(n1)
+        test_list.add_in_tail(n2)
+        test_list.add_in_tail(n3)
+        return test_list
+
+    def test_insert_in_the_empty_list(self):
+        n1=Node(12)       
+        test_list=LinkedList()
+        test_list.insert(None,n1)
+        self.assertEqual(n1.value, test_list.head.value, "Head should equal n1")
+        self.assertEqual(n1, test_list.tail, "Tail should be n1")
+        self.assertEqual(12, test_list.head.value, "Head should equal 12")
+
+    def test_insert_in_the_beginning(self):
+        pass
+
+    def test_insert_in_the_middle(self):
+        n1=Node(12)
+        n2=Node(144)
+        n3=Node(55)
+        n4=Node(77)
+        n5=Node(325)        
+        test_list=LinkedList()
+        test_list.add_in_tail(n1)
+        test_list.add_in_tail(n2)
+        test_list.add_in_tail(n3)
+        test_list.insert(n2,n4)
+        test_list.insert(n4,n5)        
+        self.assertEqual(test_list.tail.value, n3.value, "N3 value should be tail value")
+        self.assertEqual(test_list.head.value, n1.value, "N2 value should be head value")
+        self.assertEqual(n2.next, n4, "n2 should be followed by n4")
+        self.assertEqual(n4.next, n5, "n5 should be followed by n4")
+        self.assertEqual(n5.next, n3, "")
+        self.assertEqual(test_list.tail, n3, "n3 should be tail")        
+
+    def test_insert_last(self):
+        n1=Node(12)
+        n2=Node(144)
+        n3=Node(55)
+        n4=Node(77)
+        test_list=LinkedList()
+        test_list.add_in_tail(n1)
+        test_list.add_in_tail(n2)
+        test_list.add_in_tail(n3)
+        test_list.insert(n3,n4)
+        self.assertEqual(n3.next, n4, "N3 should follow n4")
+        self.assertEqual(test_list.tail.value, n4.value, "N4 value should be tail value")
+
+    def test_delete_from_empty_list(self):
+        test_list=LinkedList()
+        test_list.delete(1)
+        self.assertEqual(None, test_list.head, "Head should be none")
+        self.assertEqual(None, test_list.tail, "Tail should be none")
+    
+    def test_delete_something_not_in_the_list(self):
+        n1=Node(12)
+        n2=Node(144)
+        n3=Node(55)        
+        test_list=LinkedList()
+        test_list.add_in_tail(n1)
+        test_list.add_in_tail(n2)
+        test_list.add_in_tail(n3)
+        test_list.delete(123)
+        self.assertEqual(n1.next, n2, "n2 should be followed by n1")
+        self.assertEqual(n2.next, n3, "n2 should be followed by n1")
+        self.assertEqual(test_list.head, n1, "n1 should be head")
+        self.assertEqual(test_list.tail, n3, "n3 should be tail")
+
+    
+    def test_delete_from_list_with_one(self):
+        test_list=LinkedList()
+        test_list.add_in_tail(Node(123))
+        test_list.delete(123)
+        self.assertEqual(None, test_list.head, "Head should be none")
+        self.assertEqual(None, test_list.tail, "Tail should be none")
+
+    def test_delete_from_list_in_the_middle(self):
+        n1=Node(12)
+        n2=Node(144)
+        n3=Node(55)        
+        test_list=LinkedList()
+        test_list.add_in_tail(n1)
+        test_list.add_in_tail(n2)
+        test_list.add_in_tail(n3)
+        test_list.delete(144)
+        self.assertEqual(n1.next, n3, "n3 should be followed by n1")
+        self.assertEqual(test_list.head, n1, "n1 should be head")
+        self.assertEqual(test_list.tail, n3, "n3 should be tail")
+
+
+    def test_delete_from_list_from_the_end(self):
+        n1=Node(12)
+        n2=Node(144)
+        n3=Node(55)        
+        test_list=LinkedList()
+        test_list.add_in_tail(n1)
+        test_list.add_in_tail(n2)
+        test_list.add_in_tail(n3)
+        test_list.delete(55)
+        self.assertEqual(n1.next, n2, "n2 should be followed by n2")
+        self.assertEqual(test_list.head, n1, "n1 should be head")
+        self.assertEqual(test_list.tail, n2, "n2 should be tail")
+        self.assertEqual(test_list.len(), 2, "Length should be 2")
+
+    def test_delete_from_list_in_the_beginning(self):
+        n1=Node(12)
+        n2=Node(144)
+        n3=Node(55)        
+        test_list=LinkedList()
+        test_list.add_in_tail(n1)
+        test_list.add_in_tail(n2)
+        test_list.add_in_tail(n3)
+        test_list.delete(12)
+        self.assertEqual(n2.next, n3, "n3 should be followed by n1")
+        self.assertEqual(test_list.head, n2, "n1 should be head")
+        self.assertEqual(test_list.tail, n3, "n3 should be tail")
+    
+    def test_delete_several_in_the_middle(self):
+        test_list=self.preparation_default()
+        n1=Node(1)
+        n2=Node(2)
+        n3=Node(3)
+        test_list.add_in_tail(n1)
+        test_list.add_in_tail(n2)
+        test_list.add_in_tail(n3)
+        test_list.insert(n1, Node(144))
+        test_list.insert(n1, Node(144))
+        test_list.insert(n1, Node(144))
+        test_list.delete(144, all=True)
+        self.assertEqual(n1.next, n2, "n3 should be followed by n1")
+        self.assertEqual(test_list.head.value, 12, "n1 should be head")
+        self.assertEqual(test_list.tail.value, 3, "n3 should be tail")
+
+    def test_delete_several_in_the_end(self):
+        test_list=LinkedList()
+        n1=Node(1)
+        n2=Node(2)
+        n3=Node(3)        
+        test_list.add_in_tail(n1)
+        test_list.add_in_tail(n2)
+        test_list.add_in_tail(n3)
+        test_list.add_in_tail(Node(555))
+        test_list.add_in_tail(Node(555))
+        test_list.add_in_tail(Node(555))
+        test_list.add_in_tail(Node(555))
+        test_list.add_in_tail(Node(555))
+        test_list.delete(555, all=True)
+        self.assertEqual(n1.next, n2, "n3 should be followed by n1")
+        self.assertEqual(test_list.head, n1, "n1 should be head")
+        self.assertEqual(test_list.tail, n3, "n3 should be tail")
+
+    def test_length_for_empty_list(self):
+        test_list=LinkedList()
+        self.assertEqual(test_list.len(), 0, "length should be zero")    
+
+    def test_delete_several_in_the_beginning(self):
+        test_list=LinkedList()
+        n1=Node(1)
+        n2=Node(2)
+        n3=Node(3)        
+        test_list.add_in_tail(Node(555))
+        test_list.add_in_tail(Node(555))
+        test_list.add_in_tail(Node(555))
+        test_list.add_in_tail(Node(555))
+        test_list.add_in_tail(Node(555))
+        test_list.add_in_tail(n1)
+        test_list.add_in_tail(Node(555))
+        test_list.add_in_tail(Node(555))
+        test_list.add_in_tail(Node(555))
+        test_list.add_in_tail(n2)
+        test_list.add_in_tail(Node(555))
+        test_list.add_in_tail(Node(555))
+        test_list.add_in_tail(Node(555))
+        test_list.add_in_tail(n3)
+        test_list.add_in_tail(Node(555))
+        test_list.add_in_tail(Node(555))
+        test_list.add_in_tail(Node(555))
+        test_list.delete(555, all=True)
+        self.assertEqual(n1.next, n2, "n3 should be followed by n1")
+        self.assertEqual(test_list.head, n1, "n1 should be head")
+        self.assertEqual(test_list.tail, n3, "n3 should be tail")
+        self.assertEqual(test_list.len(), 3, "Lenght should be 3")
+
+
+    def test_clean(self):
+        test_list=LinkedList()
+        n1=Node(1)
+        n2=Node(2)
+        n3=Node(3)        
+        test_list.add_in_tail(Node(555))
+        test_list.add_in_tail(Node(555))
+        test_list.add_in_tail(Node(555))
+        test_list.add_in_tail(Node(555))
+        test_list.add_in_tail(Node(555))
+        test_list.add_in_tail(n1)
+        test_list.add_in_tail(Node(555))
+        test_list.add_in_tail(Node(555))
+        test_list.add_in_tail(Node(555))
+        test_list.add_in_tail(n2)
+        test_list.add_in_tail(Node(555))
+        test_list.add_in_tail(Node(555))
+        test_list.add_in_tail(Node(555))
+        test_list.add_in_tail(n3)
+        test_list.add_in_tail(Node(555))
+        test_list.add_in_tail(Node(555))
+        test_list.add_in_tail(Node(555))
+        test_list.clean()
+        self.assertEqual(test_list.len(), 0, "Length should be 0")
+        self.assertIsNone(test_list.head, "Should be None")
+        self.assertIsNone(test_list.tail, "Should be None")
+
+    def test_find_all(self):
+        test_list=LinkedList()
+        n1=Node(1)
+        n2=Node(2)
+        n3=Node(3)        
+        n4=Node(2)
+        test_list.add_in_tail(n1)
+        test_list.add_in_tail(n2)
+        test_list.add_in_tail(n3)
+        test_list.add_in_tail(n4)
+        finding2=test_list.find_all(2)
+        self.assertIn(n2, finding2)
+        self.assertIn(n4, finding2)
+        self.assertEqual(len(finding2),2, "The length of list is 2")
+
+    def test_find_all_empty_list(self):
+        test_list=LinkedList()
+        finding_zero_list=test_list.find_all(2)
+        self.assertEqual(len(finding_zero_list), 0, "The length of list is 0")
+        self.assertEqual(type(finding_zero_list), list, "The return value is list" )
+    
+
+if __name__ == "__main__":
+    unittest.main() 
