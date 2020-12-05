@@ -1,20 +1,6 @@
-"""
-Теперь вернёмся к удалению узла с двумя потомками. Проблема в том, что нельзя просто взять и заменить узел одним его потомком, потому что тут возможны конфликтные ситуации, связанные с упорядоченностью ключей. Не будем углубляться в эту ситуацию, воспользуемся следующим правилом: удаляемый узел надо заменить так называемым узлом-преемником, ключ которого -- наименьший из всех ключей, которые больше ключа удаляемого узла.
-Иными словами, нам надо взять правого потомка удаляемого узла, и далее спускаться по всем левым потомкам. Если мы находим лист, то его и надо поместить вместо удаляемого узла. Если мы находим узел, у которого есть только правый потомок, то преемником берём этот узел, а вместо него помещаем его правого потомка.
-
-Реализуйте:
-- метод поиска (тест: проверяем поиск отсутствующего ключа в двух вариантах (запрошенный ключ добавляем либо левому, либо правому потомку) и поиск присутствующего ключа);
-- метод добавления нового узла, задаём добавляемый ключ и соответствующее ему значение (тесты: проверяем исходное отсутствие узла по такому ключу в дереве и его наличие после добавления,
- в двух вариантах -- левым или правым узлом родителя, а также попытку добавления ключа, которое уже имеется в дереве, в таком случае ничего с деревом не делаем);
-- поиск максимального и минимального ключей, начиная с заданного узла (тест, 4 варианта: поиск начиная с корня и поиск начиная с поддерева, ищем максимальный и минимальный ключ);
-- метод удаления узла по его ключу (тест: проверяем исходное наличие узла у родителя и его отсутствие после удаления).
-
-"""
-
-
 class BSTNode:
 
-    def __init__(self, key, val, parent):
+    def __init__(self, key, val):
         self.NodeKey = key  # ключ узла
         self.NodeValue = val  # значение в узле
         #self.Parent = parent  # родитель или None для корня
@@ -52,20 +38,22 @@ class BST:
     def FindNodeByKey(self, key):
         return self._FindNodeByKey(self.Root, key)
 
-    def AddKeyValue(self, key, val):
-        self.Root = self._AddKeyValue(self.Root, key,val)
-
     def _AddKeyValue(self, node, key, val):
         # добавляем ключ-значение в дерево
         if node is None:
-            return BSTNode(key,val)
+            return BSTNode(key, val)
         if key < node.NodeKey:
             node.LeftChild= self._AddKeyValue(node.LeftChild, key, val)
         elif key > node.NodeKey:
             node.RightChild= self._AddKeyValue(node.RightChild, key, val)
         else:
-           node.NodeValue = val
-        return False  # если ключ уже есть
+           #return False # если ключ уже есть
+            node.NodeValue = val
+        return node
+
+    def AddKeyValue(self, key, val):
+        #if self._AddKeyValue(self.Root, key, val):
+        self.Root = self._AddKeyValue(self.Root, key, val)
 
 
     def delete_min(self):
@@ -120,8 +108,50 @@ class BST:
         else:
             return False  # если узел не найден
 
+    def _SumOfValues(self, node):
+        sum=0
+        sum_left=0
+        sum_right=0
+        if node is None:
+            return 0  # количество узлов в дереве
+        #print(node)
+        sum+=node.NodeValue
+        #print(sum)
+        if node.RightChild:
+            sum_right=self._SumOfValues(node.RightChild)
+        if node.LeftChild:
+            sum_left=self._SumOfValues(node.LeftChild)
+        return sum + sum_left + sum_right
+
+    def SumOfValues(self):
+        return self._SumOfValues(self.Root)
+
+    def _Count(self, node):
+        sum=0
+        sum_left=0
+        sum_right=0
+        if node is None:
+            return 0  # количество узлов в дереве
+        #print(node)
+        sum+=1
+        #print(sum)
+        if node.RightChild:
+            sum_right=self._Count(node.RightChild)
+        if node.LeftChild:
+            sum_left=self._Count(node.LeftChild)
+        return sum + sum_left + sum_right
+
     def Count(self):
-        return 0  # количество узлов в дереве
+        return self._Count(self.Root)
 
 if __name__ == '__main__':
-    BST.Root=BSTNode('Russia', 10, None)
+    root_node=BSTNode('NewYork', 10)
+    print(root_node)
+    new_tree=BST(root_node)
+    new_tree.AddKeyValue('London',123)
+    print(new_tree.SumOfValues())
+    new_tree.SumOfValues()
+    print(new_tree.Count())
+    new_tree.AddKeyValue('Moscow', 142)
+    print(new_tree.SumOfValues())
+    print(new_tree.Count())
