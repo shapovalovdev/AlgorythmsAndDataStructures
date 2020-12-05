@@ -144,14 +144,14 @@ class BST:
     def Count(self):
         return self._Count(self.Root)
 
-if __name__ == '__main__':
-    root_node=BSTNode('NewYork', 10)
-    print(root_node)
-    new_tree=BST(root_node)
-    new_tree.AddKeyValue('London',123)
-    print(new_tree.SumOfValues())
-    new_tree.SumOfValues()
-    print(new_tree.Count())
-    new_tree.AddKeyValue('Moscow', 142)
-    print(new_tree.SumOfValues())
-    print(new_tree.Count())
+# if __name__ == '__main__':
+#     root_node=BSTNode('NewYork', 10)
+#     print(root_node)
+#     new_tree=BST(root_node)
+#     new_tree.AddKeyValue('London',123)
+#     print(new_tree.SumOfValues())
+#     new_tree.SumOfValues()
+#     print(new_tree.Count())
+#     new_tree.AddKeyValue('Moscow', 142)
+#     print(new_tree.SumOfValues())
+#     print(new_tree.Count())
